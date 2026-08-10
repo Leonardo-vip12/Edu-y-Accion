@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useCallback, useMemo } from 'react'
 import { translations, LANGUAGES } from '../i18n/translations'
+import { resolveTranslation } from '../i18n/resolve'
 
 export { LANGUAGES }
 
@@ -32,19 +33,7 @@ export function useLanguage() {
 
 export function useT() {
   const { lang } = useLanguage()
-  const t = useCallback((key) => {
-    const keys = key.split('.')
-    for (const l of [lang, 'es']) {
-      let val = translations[l]
-      if (!val) continue
-      for (const k of keys) {
-        val = val[k]
-        if (val == null) break
-      }
-      if (val != null) return val
-    }
-    return key
-  }, [lang])
+  const t = useCallback((key) => resolveTranslation(translations, lang, key), [lang])
   return t
 }
 

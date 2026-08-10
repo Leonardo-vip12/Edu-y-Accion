@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import emailjs from '@emailjs/browser'
 import { motion } from 'framer-motion'
 import {
   HiMail, HiLocationMarker, HiGlobeAlt, HiUser, HiPaperAirplane, HiCheckCircle, HiPhone, HiOutlineChatAlt2,
@@ -9,6 +10,8 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import { sectionReveal, fadeInRight, fadeInUp, staggerContainer } from '../../animations/variants'
 import { useT } from '../../contexts/LanguageContext'
+import { EMAILJS_CONFIG, isEmailJSConfigured } from '../../config/emailjs'
+import { validateEmail } from '../../utils/validation'
 
 delete L.Icon.Default.prototype._getIconUrl
 L.Icon.Default.mergeOptions({
@@ -27,10 +30,6 @@ const socialLinks = [
   { icon: FaYoutube, href: 'https://youtube.com/@sembrandohuellasperu', label: 'YouTube' },
   { icon: FaTiktok, href: 'https://tiktok.com/@sembrandohuellasperu', label: 'TikTok' },
 ]
-
-function validateEmail(email) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-}
 
 function Field({ icon: Icon, type = 'text', name, value, onChange, placeholder, error, textarea = false, rows = 5 }) {
   const iconChipCls = textarea
@@ -119,12 +118,17 @@ export default function Contact() {
 
     setSending(true)
     try {
-      const res = await fetch('https://formsubmit.co/ajax/sembrandohuellasperu@gmail.com', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
-      })
-      if (!res.ok) throw new Error()
+      if (isEmailJSConfigured()) {
+        await emailjs.send(
+          EMAILJS_CONFIG.serviceId,
+          EMAILJS_CONFIG.templateId,
+          { from_name: form.name, reply_to: form.email, message: form.message },
+          { publicKey: EMAILJS_CONFIG.publicKey },
+        )
+      } else {
+        const subject = `Consulta de ${form.name} desde la web`
+        window.location.href = `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(form.message)}`
+      }
       setSubmitted(true)
     } catch {
       setErrors({ message: t('contact.send_error') })
