@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-green-deep: #14532d;
+  --color-green-light: #22c55e;
+  --color-green-leaf: #4CAF50;
+  --color-green-moss: #2d6a4f;
+  --color-green-pale: #d8f3dc;
+  --color-earth: #5c4033;
+  --color-gold: #d4a373;
+  --color-cream: #fefae0;
+  --font-poppins: 'Poppins', sans-serif;
+  --font-inter: 'Inter', sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-inter);
+    @apply bg-white text-gray-900 antialiased;
+  }
+
+  @variant dark {
+    body {
+      @apply bg-gray-950 text-gray-100;
+    }
+  }
+
+  ::selection {
+    @apply bg-green-light/30 text-green-deep;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-linear-to-r from-green-deep to-green-light bg-clip-text text-transparent;
+  }
+
+  .glass {
+    @apply backdrop-blur-md bg-white/70 border border-white/20 shadow-lg;
+  }
+
+  .glass-dark {
+    @apply backdrop-blur-md bg-gray-900/60 border border-white/10 shadow-lg;
+  }
+
+  .section-padding {
+    @apply px-4 sm:px-6 lg:px-8 py-16 md:py-24;
+  }
+
+  .max-w-container {
+    @apply max-w-7xl mx-auto;
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes sway {
+  0%, 100% { transform: rotate(-2deg); }
+  50% { transform: rotate(2deg); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-sway {
+  animation: sway 4s ease-in-out infinite;
+}

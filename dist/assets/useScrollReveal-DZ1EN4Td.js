@@ -1,0 +1,1 @@
+import{f as e,u as t}from"./proxy-er7CR2v1.js";var n=e(t(),1);function r(e=.15){let t=(0,n.useRef)(null),[r,i]=(0,n.useState)(!1);return(0,n.useEffect)(()=>{let n=t.current;if(!n)return;let r=new IntersectionObserver(([e])=>{e.isIntersecting&&(i(!0),r.unobserve(n))},{threshold:e});return r.observe(n),()=>r.disconnect()},[e]),[t,r]}export{r as t};
