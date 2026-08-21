@@ -1,0 +1,19 @@
+{
+  "short_name": "Sembrando Huellas",
+  "name": "Sembrando Huellas Perú — Edu y Acción",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#052e16",
+  "theme_color": "#16a34a",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "description": "Circuito educativo ambiental para la conservación biocultural de la Amazonía peruana en Ucayali.",
+  "categories": ["education", "environment", "games"]
+}

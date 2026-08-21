@@ -90,7 +90,7 @@ function VideoThumbnail({ videoSrc, poster }) {
           <div className="w-8 h-8 border-2 border-white/30 border-t-white/80 rounded-full animate-spin" />
         </div>
       ) : thumbnail ? (
-        <img src={thumbnail} alt="" className="absolute inset-0 w-full h-full object-cover" />
+        <img src={thumbnail} alt="" className="absolute inset-0 w-full h-full object-cover" decoding="async" />
       ) : (
         <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
           <HiPlay className="text-white/20 text-6xl" />
@@ -124,7 +124,7 @@ function MediaCard({ item, layout: cardLayout, onClick }) {
           </>
         ) : (
           <>
-            <img src={item.src} alt={item.alt} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" loading="lazy" />
+            <img src={item.src} alt={item.alt} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" loading="lazy" decoding="async" />
           </>
         )}
 
@@ -164,7 +164,7 @@ function HeroSection({ item, onOpen }) {
       onClick={onOpen}
     >
       <div className="aspect-[21/9] md:aspect-[3/1] relative overflow-hidden">
-        <img src={item.src} alt={item.alt} className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" loading="lazy" />
+        <img src={item.src} alt={item.alt} className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" loading="lazy" decoding="async" />
         <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10">
           <span className="text-green-300 text-xs font-semibold uppercase tracking-widest">{item.category}</span>
@@ -210,7 +210,7 @@ function Modal({ items, index, onClose, onIndexChange }) {
         initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }}
         transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
         onClick={(e) => e.stopPropagation()}>
-        <button onClick={onClose} className="absolute top-4 right-4 z-30 w-10 h-10 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white flex items-center justify-center hover:bg-black/80 transition-colors shadow-lg">
+        <button onClick={onClose} aria-label="Cerrar vista previa" className="absolute top-4 right-4 z-30 w-10 h-10 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white flex items-center justify-center hover:bg-black/80 transition-colors shadow-lg">
           <HiX className="text-xl" />
         </button>
 
@@ -230,7 +230,7 @@ function Modal({ items, index, onClose, onIndexChange }) {
             <iframe src={youtubeUrl} title={current.title || current.alt} className="absolute inset-0 w-full h-full" allow="autoplay; encrypted-media" allowFullScreen />
           </div>
         ) : isVideo && !videoError ? (
-          <video controls autoPlay preload="metadata" className="w-full max-h-[85vh] bg-black mx-auto" poster={current.poster || undefined} onError={() => setVideoError(true)}>
+          <video controls autoPlay playsInline preload="metadata" className="w-full max-h-[85vh] bg-black mx-auto" poster={current.poster || undefined} onError={() => setVideoError(true)}>
             <source src={current.video} type="video/mp4" />
           </video>
         ) : current.src ? (
@@ -275,14 +275,14 @@ function NetflixCarousel({ items, onOpen }) {
         ))}
       </Swiper>
 
-      <button onClick={() => swiperRef.current?.slidePrev()}
+      <button onClick={() => swiperRef.current?.slidePrev()} aria-label="Diapositiva anterior"
         className="absolute left-0 top-0 bottom-0 z-20 w-14 opacity-0 group-hover/carousel:opacity-100 transition-opacity duration-300 bg-gradient-to-r from-black/40 to-transparent flex items-center justify-start pl-2">
         <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white/20 transition-colors">
           <HiChevronLeft className="text-white text-xl" />
         </div>
       </button>
 
-      <button onClick={() => swiperRef.current?.slideNext()}
+      <button onClick={() => swiperRef.current?.slideNext()} aria-label="Diapositiva siguiente"
         className="absolute right-0 top-0 bottom-0 z-20 w-14 opacity-0 group-hover/carousel:opacity-100 transition-opacity duration-300 bg-gradient-to-l from-black/40 to-transparent flex items-center justify-end pr-2">
         <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white/20 transition-colors">
           <HiChevronRight className="text-white text-xl" />

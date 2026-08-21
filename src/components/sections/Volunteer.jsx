@@ -1,9 +1,11 @@
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { HiOutlineHeart, HiOutlineGift } from 'react-icons/hi'
 import { FaHandshake } from 'react-icons/fa'
 import { helpCardsData } from '../../data'
 import { sectionReveal, staggerContainer, cardHover } from '../../animations/variants'
 import { useT, useData } from '../../contexts/LanguageContext'
+import Toast from '../layout/Toast'
 
 const iconMap = {
   HiOutlineHeart: HiOutlineHeart,
@@ -11,27 +13,36 @@ const iconMap = {
   HiOutlineHandshake: FaHandshake,
 }
 
-const actions = [
-  () => {
-    const subject = encodeURIComponent('Quiero ser voluntario en Sembrando Huellas Perú')
-    const body = encodeURIComponent('Hola, me gustaría conocer más sobre las oportunidades de voluntariado.')
-    window.location.href = `mailto:sembrandohuellasperu@gmail.com?subject=${subject}&body=${body}`
-  },
-  () => {
-    const subject = encodeURIComponent('Quiero hacer una donación a Sembrando Huellas Perú')
-    const body = encodeURIComponent('Hola, me gustaría conocer los medios disponibles para realizar una donación.')
-    window.location.href = `mailto:sembrandohuellasperu@gmail.com?subject=${subject}&body=${body}`
-  },
-  () => {
-    const subject = encodeURIComponent('Propuesta de alianza - Sembrando Huellas Perú')
-    const body = encodeURIComponent('Hola, represento a una organización interesada en formar una alianza.')
-    window.location.href = `mailto:sembrandohuellasperu@gmail.com?subject=${subject}&body=${body}`
-  },
-]
-
 export default function Volunteer() {
   const t = useT()
   const d = useData()
+  const [toast, setToast] = useState(null)
+
+  const handleCardClick = (index) => {
+    let subject = ''
+    let body = ''
+    let toastMessage = ''
+
+    if (index === 0) {
+      subject = encodeURIComponent('Quiero ser voluntario en Sembrando Huellas Perú')
+      body = encodeURIComponent('Hola, me gustaría conocer más sobre las oportunidades de voluntariado.')
+      toastMessage = 'Abriendo tu cliente de correo para registro de voluntariado...'
+    } else if (index === 1) {
+      subject = encodeURIComponent('Quiero hacer una donación a Sembrando Huellas Perú')
+      body = encodeURIComponent('Hola, me gustaría conocer los medios disponibles para realizar una donación.')
+      toastMessage = 'Abriendo información de contacto para donaciones...'
+    } else {
+      subject = encodeURIComponent('Propuesta de alianza - Sembrando Huellas Perú')
+      body = encodeURIComponent('Hola, represento a una organización interesada en formar una alianza.')
+      toastMessage = 'Abriendo tu cliente de correo para propuesta de alianza...'
+    }
+
+    setToast({ message: toastMessage, type: 'info' })
+    setTimeout(() => {
+      window.location.href = `mailto:sembrandohuellasperu@gmail.com?subject=${subject}&body=${body}`
+    }, 600)
+  }
+
   return (
     <section id="help" className="py-20 bg-gray-50 dark:bg-gray-950">
       <div className="max-w-7xl mx-auto px-4">
@@ -60,7 +71,6 @@ export default function Volunteer() {
         >
           {helpCardsData.map((card, index) => {
             const Icon = iconMap[card.icon] || HiOutlineHeart
-            const handleAction = actions[index]
 
             return (
               <motion.div
@@ -84,7 +94,7 @@ export default function Volunteer() {
                   </p>
 
                   <button
-                    onClick={handleAction}
+                    onClick={() => handleCardClick(index)}
                     className="w-full py-3 px-6 rounded-xl bg-white text-green-700 font-bold hover:bg-green-50 transition-colors shadow-lg cursor-pointer"
                   >
                     {d(`helpCardsData.${index}.action`) || card.action}
@@ -95,6 +105,8 @@ export default function Volunteer() {
           })}
         </motion.div>
       </div>
+
+      <Toast message={toast?.message} type={toast?.type} onClose={() => setToast(null)} />
     </section>
   )
 }

@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { HiVolumeUp, HiVolumeOff } from 'react-icons/hi'
 import GuardianesAmazonia from './GuardianesAmazonia'
 import CircuitoEcologico from './CircuitoEcologico'
+import { isAudioMuted, toggleAudioMuted } from '../../utils/sounds'
 
 const GAMES = [
   {
@@ -24,6 +26,12 @@ const GAMES = [
 
 export default function GamesHub() {
   const [activeGame, setActiveGame] = useState(null)
+  const [muted, setMuted] = useState(() => isAudioMuted())
+
+  const handleToggleMute = () => {
+    const newState = toggleAudioMuted()
+    setMuted(newState)
+  }
 
   if (activeGame) {
     return (
@@ -38,6 +46,15 @@ export default function GamesHub() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
               </svg>
               Volver a juegos
+            </button>
+
+            <button
+              onClick={handleToggleMute}
+              aria-label={muted ? 'Activar sonido' : 'Silenciar sonido'}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs font-medium transition-colors"
+            >
+              {muted ? <HiVolumeOff className="w-4 h-4 text-red-400" /> : <HiVolumeUp className="w-4 h-4 text-green-400" />}
+              <span>{muted ? 'Sonido desactivado' : 'Sonido activado'}</span>
             </button>
           </div>
           <AnimatePresence mode="wait">
@@ -76,9 +93,19 @@ export default function GamesHub() {
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-3">
             Minijuegos Educativos
           </h2>
-          <p className="text-green-200/60 max-w-xl mx-auto">
+          <p className="text-green-200/60 max-w-xl mx-auto mb-4">
             Aprende sobre la Amazonía mientras te diviertes. Elige un juego y comienza la aventura.
           </p>
+
+          <button
+            onClick={handleToggleMute}
+            aria-label={muted ? 'Activar sonido' : 'Silenciar sonido'}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs font-medium transition-colors"
+          >
+            {muted ? <HiVolumeOff className="w-4 h-4 text-red-400" /> : <HiVolumeUp className="w-4 h-4 text-green-400" />}
+            <span>{muted ? 'Sonido de juegos desactivado' : 'Sonido de juegos activado'}</span>
+          </button>
+
           <div className="w-20 h-1 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full mx-auto mt-4" />
         </motion.div>
 

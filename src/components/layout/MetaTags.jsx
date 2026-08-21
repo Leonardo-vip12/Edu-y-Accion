@@ -7,26 +7,66 @@ const url = 'https://sembrandohuellasperu.org'
 
 export default function MetaTags({ title, description, image }) {
   const fullTitle = title ? `${title} | Sembrando Huellas Perú` : defaultTitle
+  const metaDesc = description || defaultDescription
+  const metaImage = image || defaultImage
+
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'NGO',
+        '@id': `${url}#organization`,
+        name: 'Sembrando Huellas Perú',
+        url: url,
+        logo: `${url}/favicon.svg`,
+        image: `${url}${metaImage}`,
+        description: metaDesc,
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: 'Pucallpa',
+          addressRegion: 'Ucayali',
+          addressCountry: 'PE',
+        },
+      },
+      {
+        '@type': 'EducationalApplication',
+        '@id': `${url}#app`,
+        name: 'Circuito Educativo Ambiental Ucayali',
+        operatingSystem: 'All',
+        applicationCategory: 'EducationalApplication',
+        description: 'Módulos interactivos y juegos educativos sobre la biodiversidad de la Amazonía Peruana.',
+        offers: {
+          '@type': 'Offer',
+          price: '0',
+          priceCurrency: 'PEN',
+        },
+      },
+    ],
+  }
 
   return (
     <Helmet>
       <title>{fullTitle}</title>
-      <meta name="description" content={description || defaultDescription} />
+      <meta name="description" content={metaDesc} />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <meta charSet="utf-8" />
 
       <meta property="og:type" content="website" />
       <meta property="og:url" content={url} />
       <meta property="og:title" content={fullTitle} />
-      <meta property="og:description" content={description || defaultDescription} />
-      <meta property="og:image" content={image || defaultImage} />
+      <meta property="og:description" content={metaDesc} />
+      <meta property="og:image" content={metaImage} />
 
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={fullTitle} />
-      <meta name="twitter:description" content={description || defaultDescription} />
-      <meta name="twitter:image" content={image || defaultImage} />
+      <meta name="twitter:description" content={metaDesc} />
+      <meta name="twitter:image" content={metaImage} />
 
       <link rel="canonical" href={url} />
+
+      <script type="application/ld+json">
+        {JSON.stringify(structuredData)}
+      </script>
     </Helmet>
   )
 }

@@ -90,6 +90,7 @@ export default function Navbar() {
           <button
             onClick={() => handleLinkClick('#hero')}
             className="flex items-center gap-2 group"
+            aria-label="Ir al inicio"
           >
             <span className="text-xl lg:text-2xl font-bold text-green-700 dark:text-green-400 group-hover:text-green-600 dark:group-hover:text-green-300 transition-colors">
               {SITE_CONFIG.shortName}
@@ -287,6 +288,7 @@ export default function Navbar() {
                     whileTap={{ scale: 0.9 }}
                     onClick={toggle}
                     className="p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                    aria-label={dark ? 'Activar modo claro' : 'Activar modo oscuro'}
                   >
                     {dark ? <HiSun className="w-5 h-5" /> : <HiMoon className="w-5 h-5" />}
                   </motion.button>

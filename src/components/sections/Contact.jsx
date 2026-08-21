@@ -12,6 +12,7 @@ import { sectionReveal, fadeInRight, fadeInUp, staggerContainer } from '../../an
 import { useT } from '../../contexts/LanguageContext'
 import { EMAILJS_CONFIG, isEmailJSConfigured } from '../../config/emailjs'
 import { validateEmail } from '../../utils/validation'
+import Toast from '../layout/Toast'
 
 delete L.Icon.Default.prototype._getIconUrl
 L.Icon.Default.mergeOptions({
@@ -94,6 +95,7 @@ export default function Contact() {
   const [errors, setErrors] = useState({})
   const [submitted, setSubmitted] = useState(false)
   const [sending, setSending] = useState(false)
+  const [toast, setToast] = useState(null)
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -113,6 +115,7 @@ export default function Contact() {
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors)
+      setToast({ message: 'Por favor, corrige los errores en el formulario.', type: 'error' })
       return
     }
 
@@ -130,8 +133,10 @@ export default function Contact() {
         window.location.href = `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(form.message)}`
       }
       setSubmitted(true)
+      setToast({ message: '¡Mensaje enviado con éxito! Nos pondremos en contacto contigo pronto.', type: 'success' })
     } catch {
       setErrors({ message: t('contact.send_error') })
+      setToast({ message: 'Error al enviar el mensaje. Por favor intenta de nuevo.', type: 'error' })
     } finally {
       setSending(false)
     }
@@ -332,6 +337,8 @@ export default function Contact() {
           </div>
         </motion.div>
       </div>
+
+      <Toast message={toast?.message} type={toast?.type} onClose={() => setToast(null)} />
     </section>
   )
 }

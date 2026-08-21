@@ -1,6 +1,30 @@
 const AudioCtx = window.AudioContext || window.webkitAudioContext
 let ctx = null
 
+let isMutedState = (() => {
+  try {
+    return localStorage.getItem('shp-audio-muted') === 'true'
+  } catch {
+    return false
+  }
+})()
+
+export function isAudioMuted() {
+  return isMutedState
+}
+
+export function setAudioMuted(muted) {
+  isMutedState = Boolean(muted)
+  try {
+    localStorage.setItem('shp-audio-muted', isMutedState ? 'true' : 'false')
+  } catch {}
+  return isMutedState
+}
+
+export function toggleAudioMuted() {
+  return setAudioMuted(!isMutedState)
+}
+
 function getCtx() {
   if (!ctx) ctx = new AudioCtx()
   if (ctx.state === 'suspended') ctx.resume()
@@ -8,6 +32,7 @@ function getCtx() {
 }
 
 function playNote(freq, duration, type = 'sine', startTime = 0, volume = 0.15) {
+  if (isMutedState) return
   try {
     const c = getCtx()
     const o = c.createOscillator()
@@ -31,6 +56,7 @@ export function playCollect() {
 }
 
 export function playHit() {
+  if (isMutedState) return
   const c = getCtx()
   if (!c) return
   try {
